@@ -1,18 +1,20 @@
 {
-  "name": "react-jhipster",
-  "description": "A Jhipster util library for React",
+  "name": "react-jhipster-mui",
+  "description": "A Forked Jhipster util library for React with Material UI 5",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jhipster/react-jhipster.git"
+    "url": "https://github.com/wlminus/react-jhipster-mui"
   },
   "keywords": [
     "jhipster",
-    "react"
+    "react",
+    "material-ui",
+    "mui"
   ],
-  "author": "Deepu KS",
+  "author": "wlminus",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/jhipster/generator-jhipster/issues"
+    "url": "https://github.com/wlminus/react-jhipster-mui"
   },
   "main": "lib/index.js",
   "exports": "./lib/index.js",
@@ -37,7 +39,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^7.6.8",
-    "reactstrap": "^9.0.0"
+    "reactstrap": "^9.0.0",
+    "@mui/material": "^5.1.0"
   },
   "peerDependenciesMeta": {
     "reactstrap": {
