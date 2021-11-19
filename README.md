@@ -6,8 +6,6 @@ The feature listed here have changed to Material UI
 The rest under contruction, it still work in reactstrap
 
 
----
-
 <p align="center">
   <a href="http://www.jhipster.tech/" rel="noopener" target="_blank">
     <img width="150" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/main/images/logo/logo-jhipster2x.png" alt="MUI logo">
