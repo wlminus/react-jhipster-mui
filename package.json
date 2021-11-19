@@ -34,13 +34,15 @@
   ],
   "homepage": "https://www.jhipster.tech",
   "peerDependencies": {
+    "@mui/material": "^5.1.0",
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
     "axios": "*",
     "dayjs": "^1.10.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^7.6.8",
-    "reactstrap": "^9.0.0",
-    "@mui/material": "^5.1.0"
+    "reactstrap": "^9.0.0"
   },
   "peerDependenciesMeta": {
     "reactstrap": {
