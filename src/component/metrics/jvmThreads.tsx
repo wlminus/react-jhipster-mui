@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextFormat } from '../../formatter';
-import { Progress, Button } from 'reactstrap';
 import ThreadsModal from './threads-modal';
+import MuiLinearProgress from './mui-linear-progress';
+import Button from '@mui/material/Button';
 
 export interface IJvmThreadsProps {
   jvmThreads: any;
@@ -78,7 +78,7 @@ export class JvmThreads extends React.Component<IJvmThreadsProps, IJvmThreadsSta
     });
   };
 
-  handleClose = (e) => {
+  handleClose = () => {
     this.setState({
       showModal: false
     });
@@ -87,7 +87,6 @@ export class JvmThreads extends React.Component<IJvmThreadsProps, IJvmThreadsSta
   renderModal = () => <ThreadsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.jvmThreads} />;
 
   render() {
-    const { wholeNumberFormat } = this.props;
     const { threadStats } = this.state;
     return (
       <div>
@@ -95,43 +94,32 @@ export class JvmThreads extends React.Component<IJvmThreadsProps, IJvmThreadsSta
         <p>
           <span>Runnable</span> {threadStats.threadDumpRunnable}
         </p>
-        <Progress animated min="0" value={threadStats.threadDumpRunnable} max={threadStats.threadDumpAll} color="success">
-          <span>
-            <TextFormat value={threadStats.threadDumpRunnable * 100 / threadStats.threadDumpAll} type="number" format={wholeNumberFormat} />
-          </span>
-        </Progress>
+        <MuiLinearProgress color="success" value={threadStats.threadDumpRunnable * 100 / threadStats.threadDumpAll} />
+        
         <p>
           <span>Timed Waiting</span> ({threadStats.threadDumpTimedWaiting})
         </p>
-        <Progress animated min="0" value={threadStats.threadDumpTimedWaiting} max={threadStats.threadDumpAll} color="warning">
-          <span>
-            <TextFormat
-              value={threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll}
-              type="number"
-              format={wholeNumberFormat}
-            />
-          </span>
-        </Progress>
+        <MuiLinearProgress color="warning" value={threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll} />
+        
         <p>
           <span>Waiting</span> ({threadStats.threadDumpWaiting})
         </p>
-        <Progress animated min="0" value={threadStats.threadDumpWaiting} max={threadStats.threadDumpAll} color="warning">
-          <span>
-            <TextFormat value={threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll} type="number" format={wholeNumberFormat} />
-          </span>
-        </Progress>
+        <MuiLinearProgress color="warning" value={threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll} />
+        
         <p>
           <span>Blocked</span> ({threadStats.threadDumpBlocked})
         </p>
-        <Progress animated min="0" value={threadStats.threadDumpBlocked} max={threadStats.threadDumpAll} color="success">
-          <span>
-            <TextFormat value={threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll} type="number" format={wholeNumberFormat} />
-          </span>
-        </Progress>
+        <MuiLinearProgress color="success" value={threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll} />
         {this.renderModal()}
-        <Button color="primary" size="sm" className="hand" onClick={this.openModal}>
-          Expand
-        </Button>
+        
+        <div style={{ 
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '20px'
+        }}>
+          <Button color="primary" onClick={this.openModal} variant="contained">Expand</Button>
+        </div> 
       </div>
     );
   }
