@@ -1,3 +1,13 @@
+
+# UNDER CONTRUCTION
+The feature listed here have changed to Material UI
+* JhiPagination
+
+The rest under contruction, it still work in reactstrap
+
+
+---
+
 <p align="center">
   <a href="http://www.jhipster.tech/" rel="noopener" target="_blank">
     <img width="150" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/main/images/logo/logo-jhipster2x.png" alt="MUI logo">
@@ -16,7 +26,33 @@ This is forked JHipster React utilities library to switch UI library to Material
 [![NPM version][npm-image]][npm-url]
 [![Test & Build](https://github.com/wlminus/react-jhipster-mui/actions/workflows/ci.yml/badge.svg)](https://github.com/wlminus/react-jhipster-mui/actions/workflows/ci.yml)
 
-Full documentation and information about jhipster is available on our website at [http://www.jhipster.tech/][jhipster-url]
+---
+# IMPORTANT CHANGE
+
+### Pagination Component
+Pagination component now using Materiai UI [Pagination Component](https://mui.com/components/pagination/). It supported all [props](https://mui.com/api/pagination/) of it and I made some change of JhiPagination's props.
+
+* `activePage` is deleted, using `page` from mui component directly
+* `onSelect: (page: number) => void;` is deleted, using `onChange: (event: React.ChangeEvent<unknown>, page: number) => void` from mui component directly
+* `maxButtons` is deleted, mui component self manage how the page button show and it work like the previous reactstrap
+
+```diff
+export interface IJhiPaginationProps {
+- activePage: number;
+- onSelect: (page: number) => void;
+- maxButtons: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+```
+
+
+
+
+
+
+---
+Full documentation and information about jhipster is available on website at [http://www.jhipster.tech/](http://www.jhipster.tech/)
 
 Please read our [guidelines](https://github.com/jhipster/generator-jhipster/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
