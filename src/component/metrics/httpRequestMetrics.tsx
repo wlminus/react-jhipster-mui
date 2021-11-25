@@ -1,7 +1,12 @@
 import React from 'react';
 import { TextFormat } from '../../formatter';
-import { Progress, Table } from 'reactstrap';
 import { nanToZero } from '../../util/number-utils';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import MuiLinearProgress from './mui-linear-progress';
 
 export interface IHttpRequestMetricsProps {
   requestMetrics: any;
@@ -23,34 +28,30 @@ export class HttpRequestMetrics extends React.Component<IHttpRequestMetricsProps
           </b>
         </p>
         <Table>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Count</th>
-              <th className="text-end">Mean</th>
-              <th className="text-end">Max</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHead>
+            <TableRow>
+              <TableCell>Code</TableCell>
+              <TableCell>Count</TableCell>
+              <TableCell className="text-end">Mean</TableCell>
+              <TableCell className="text-end">Max</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {Object.keys(requestMetrics.percode).map((key, index) => (
-              <tr key={index}>
-                <td>{key}</td>
-                <td>
-                  <Progress min="0" max={requestMetrics.all.count} value={requestMetrics.percode[key].count} color="success" animated>
-                    <span>
-                      <TextFormat value={requestMetrics.percode[key].count} type="number" format={wholeNumberFormat} />
-                    </span>
-                  </Progress>
-                </td>
-                <td className="text-end">
+              <TableRow key={index}>
+                <TableCell>{key}</TableCell>
+                <TableCell>
+                  <MuiLinearProgress color="success" value={100 * requestMetrics.percode[key].count / requestMetrics.all.count} />
+                </TableCell>
+                <TableCell className="text-end">
                   <TextFormat value={nanToZero(requestMetrics.percode[key].mean)} type="number" format={twoDigitAfterPointFormat} />
-                </td>
-                <td className="text-end">
+                </TableCell>
+                <TableCell className="text-end">
                   <TextFormat value={nanToZero(requestMetrics.percode[key].max)} type="number" format={twoDigitAfterPointFormat} />
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
+          </TableBody>
         </Table>
       </div>
     );

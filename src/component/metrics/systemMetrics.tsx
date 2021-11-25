@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextFormat } from '../../formatter';
-import { Progress, Col, Row } from 'reactstrap';
+import MuiLinearProgress from './mui-linear-progress';
+import Grid from "@mui/material/Grid";
 
 export interface ISystemMetricsProps {
   systemMetrics: any;
@@ -35,64 +36,56 @@ export class SystemMetrics extends React.Component<ISystemMetricsProps> {
     return (
       <div>
         <h4>System</h4>
-        <Row>
-          <Col md="4">Uptime</Col>
-          <Col md="8" className="text-end">
+        <Grid container>
+          <Grid md={4} xs={4} lg={4}>Uptime</Grid>
+          <Grid md={8} xs={8} lg={8} className="text-end">
             {SystemMetrics.convertMillisecondsToDuration(systemMetrics['process.uptime'])}
-          </Col>
-        </Row>
-        <Row>
-          <Col md="4">Start time</Col>
-          <Col md="8" className="text-end">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid md={4} xs={4} lg={4}>Start time</Grid>
+          <Grid md={8} xs={8} lg={8} className="text-end">
             <TextFormat value={systemMetrics['process.start.time']} type="date" format={timestampFormat} />
-          </Col>
-        </Row>
-        <Row>
-          <Col md="9">Process CPU usage</Col>
-          <Col md="3" className="text-end">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid md={9} xs={9} lg={9}>Process CPU usage</Grid>
+          <Grid md={3} xs={3} lg={3} className="text-end">
             <TextFormat value={100 * systemMetrics['process.cpu.usage']} type="number" format={wholeNumberFormat} /> %
-          </Col>
-        </Row>
-        <Progress animated value={100 * systemMetrics['process.cpu.usage']} color="success">
-          <span>
-            <TextFormat value={100 * systemMetrics['process.cpu.usage']} type="number" format={wholeNumberFormat} /> %
-          </span>
-        </Progress>
-        <Row>
-          <Col md="9">System CPU usage</Col>
-          <Col md="3" className="text-end">
+          </Grid>
+        </Grid>
+        <MuiLinearProgress color="success" value={100 * systemMetrics['process.cpu.usage']} />
+        <Grid container>
+          <Grid md={9} xs={9} lg={9}>System CPU usage</Grid>
+          <Grid md={3} xs={3} lg={3} className="text-end">
             <TextFormat value={100 * systemMetrics['system.cpu.usage']} type="number" format={wholeNumberFormat} /> %
-          </Col>
-        </Row>
-        <Progress animated value={100 * systemMetrics['system.cpu.usage']} color="success">
-          <span>
-            <TextFormat value={100 * systemMetrics['system.cpu.usage']} type="number" format={wholeNumberFormat} /> %
-          </span>
-        </Progress>
-        <Row>
-          <Col md="9">System CPU count</Col>
-          <Col md="3" className="text-end">
+          </Grid>
+        </Grid>
+        <MuiLinearProgress color="success" value={100 * systemMetrics['system.cpu.usage']} />
+        <Grid container>
+          <Grid md={9} xs={9} lg={9}>System CPU count</Grid>
+          <Grid md={3} xs={3} lg={3} className="text-end">
             {systemMetrics['system.cpu.count']}
-          </Col>
-        </Row>
-        <Row>
-          <Col md="9">System 1m Load average</Col>
-          <Col md="3" className="text-end">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid md={9} xs={9} lg={9}>System 1m Load average</Grid>
+          <Grid md={3} xs={3} lg={3} className="text-end">
             <TextFormat value={systemMetrics['system.load.average.1m']} type="number" format={wholeNumberFormat} />
-          </Col>
-        </Row>
-        <Row>
-          <Col md="7">Process files max</Col>
-          <Col md="5" className="text-end">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid md={7} xs={7} lg={7}>Process files max</Grid>
+          <Grid md={5} xs={5} lg={5} className="text-end">
             <TextFormat value={systemMetrics['process.files.max']} type="number" format={wholeNumberFormat} />
-          </Col>
-        </Row>
-        <Row>
-          <Col md="4">Process files open</Col>
-          <Col md="8" className="text-end">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid md={4} xs={4} lg={4}>Process files open</Grid>
+          <Grid md={8} xs={8} lg={8} className="text-end">
             <TextFormat value={systemMetrics['process.files.open']} type="number" format={wholeNumberFormat} />
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </div>
     );
   }

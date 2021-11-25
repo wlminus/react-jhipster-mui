@@ -1,6 +1,10 @@
 import React from 'react';
 import { TextFormat } from '../../formatter';
-import { Table } from 'reactstrap';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import { nanToZero } from '../../util/number-utils';
 
 export interface ICacheMetricsProps {
@@ -15,25 +19,25 @@ export class CacheMetrics extends React.Component<ICacheMetricsProps> {
     return (
       <div>
         <h3>Cache statistics</h3>
-        <Table>
-          <thead>
-            <tr>
-              <th>Cache Name</th>
-              <th>Cache Hits</th>
-              <th>Cache Misses</th>
-              <th>Cache Gets</th>
-              <th>Cache Hit %</th>
-              <th>Cache Miss %</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Cache Name</TableCell>
+              <TableCell>Cache Hits</TableCell>
+              <TableCell>Cache Misses</TableCell>
+              <TableCell>Cache Gets</TableCell>
+              <TableCell>Cache Hit %</TableCell>
+              <TableCell>Cache Miss %</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {Object.keys(cacheMetrics).map(key => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td>{cacheMetrics[key]['cache.gets.hit']}</td>
-                <td>{cacheMetrics[key]['cache.gets.miss']}</td>
-                <td>{cacheMetrics[key]['cache.gets.miss'] + cacheMetrics[key]['cache.gets.hit']}</td>
-                <td>
+              <TableRow key={key}>
+                <TableCell >{key}</TableCell >
+                <TableCell >{cacheMetrics[key]['cache.gets.hit']}</TableCell >
+                <TableCell >{cacheMetrics[key]['cache.gets.miss']}</TableCell >
+                <TableCell >{cacheMetrics[key]['cache.gets.miss'] + cacheMetrics[key]['cache.gets.hit']}</TableCell >
+                <TableCell >
                   <TextFormat
                     value={nanToZero(
                       100 *
@@ -43,8 +47,8 @@ export class CacheMetrics extends React.Component<ICacheMetricsProps> {
                     type="number"
                     format={twoDigitAfterPointFormat}
                   />
-                </td>
-                <td>
+                </TableCell >
+                <TableCell >
                   <TextFormat
                     value={nanToZero(
                       100 *
@@ -54,10 +58,10 @@ export class CacheMetrics extends React.Component<ICacheMetricsProps> {
                     type="number"
                     format={twoDigitAfterPointFormat}
                   />
-                </td>
-              </tr>
+                </TableCell >
+              </TableRow>
             ))}
-          </tbody>
+          </TableBody>
         </Table>
       </div>
     );

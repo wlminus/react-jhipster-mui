@@ -10,7 +10,7 @@ const MuiLinearProgress = (props: LinearProgressProps & { value: number }) => {
             height: 20
           }} variant="determinate" {...props} />
         </Box>
-        <Box sx={{ minWidth: 35 }}>
+        <Box sx={{ minWidth: 42 }}>
           <Typography variant="body2" color="text.secondary">
             {`${Math.round(
               props.value,
