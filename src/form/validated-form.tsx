@@ -13,7 +13,10 @@ import {
   UseFormSetValue,
   ValidationMode,
 } from 'react-hook-form';
-import { Button, Col, Form, FormFeedback, FormGroup, Input, InputProps, Label, Row } from 'reactstrap';
+import { Col, Form, FormFeedback, FormGroup, Input, InputProps, Label, Row } from 'reactstrap';
+
+import Button from '@mui/material/Button';
+import Grid from "@mui/material/Grid";
 
 import { byteSize, isEmpty, openFile, setFileData } from '../util';
 
@@ -381,7 +384,7 @@ export function ValidatedBlobField({
   );
 
   const defaultClearBtn = (
-    <Button color="danger" size="sm" onClick={clearBlob}>
+    <Button color="warning" size="small" onClick={clearBlob}>
       <strong>&nbsp;x&nbsp;</strong>
     </Button>
   );
@@ -405,16 +408,16 @@ export function ValidatedBlobField({
             </a>
           ) : null}
           <br />
-          <Row className="jhi-validated-blob-field-item-row">
-            <Col md="11" className="jhi-validated-blob-field-item-row-col">
+          <Grid container className="jhi-validated-blob-field-item-row">
+            <Grid xs={11} lg={11} md={11} className="jhi-validated-blob-field-item-row-col">
               <span>
                 {blobContentType}, {byteSize(blob)}
               </span>
-            </Col>
-            <Col md="1" className="jhi-validated-blob-field-item-row-col jhi-validated-blob-field-item-clear-btn">
+            </Grid>
+            <Grid xs={1} lg={1} md={1} className="jhi-validated-blob-field-item-row-col jhi-validated-blob-field-item-clear-btn">
               {clearBtn ? clearBtn(clearBlob) : defaultClearBtn}
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </div>
       ) : null}
       {inputRow(input)}

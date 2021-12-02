@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, Badge, Row } from 'reactstrap';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,6 +15,7 @@ import Stack from "@mui/material/Stack";
 import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField/TextField';
 import Badge from '@mui/material/Badge';
+import Chip from '@mui/material/Chip';
 
 export interface IThreadsModalProps {
   showModal: boolean;
@@ -85,15 +85,15 @@ export class ThreadsModal extends React.Component<IThreadsModalProps, IThreadsMo
     return { threadDumpAll, threadDumpRunnable, threadDumpWaiting, threadDumpTimedWaiting, threadDumpBlocked };
   };
 
-  getBadgeClass = threadState => {
+  getBadgeColor = threadState => {
     if (threadState === 'RUNNABLE') {
-      return 'badge-success';
+      return 'success';
     } else if (threadState === 'WAITING') {
-      return 'badge-info';
+      return 'info';
     } else if (threadState === 'TIMED_WAITING') {
-      return 'badge-warning';
+      return 'warning';
     } else if (threadState === 'BLOCKED') {
-      return 'badge-danger';
+      return 'error';
     }
   };
 
@@ -147,11 +147,9 @@ export class ThreadsModal extends React.Component<IThreadsModalProps, IThreadsMo
               ? filteredList.map((threadDumpInfo, i) => (
                   <div key={`dump-${i}`}>
                     <h6>
-                      {' '}
-                      <span className={'badge ' + this.getBadgeClass(threadDumpInfo.threadState)}>{threadDumpInfo.threadState}</span>
+                      <Chip label={threadDumpInfo.threadState} color={this.getBadgeColor(threadDumpInfo.threadState)} />
                       &nbsp;
-                      {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId}
-                      )&nbsp;
+                      {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId})&nbsp;
                     </h6>
                     <ThreadItem threadDumpInfo={threadDumpInfo} />
                     <TableRow>
