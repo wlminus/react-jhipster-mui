@@ -12,13 +12,16 @@ import {
   UseFormRegister,
   UseFormSetValue,
   ValidationMode,
+  Controller,
+  Control
 } from 'react-hook-form';
-import { Col, Form, FormFeedback, FormGroup, Input, InputProps, Label, Row } from 'reactstrap';
 
 import Button from '@mui/material/Button';
 import Grid from "@mui/material/Grid";
 
-import { byteSize, isEmpty, openFile, setFileData } from '../util';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { byteSize, isEmpty, openFile } from '../util';
+import FormGroup from '@mui/material/FormGroup';
 
 export interface ValidatedFormProps {
   children: React.ReactNode;
@@ -41,6 +44,7 @@ export interface ValidatedFormProps {
  */
 export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest }: ValidatedFormProps): JSX.Element {
   const {
+    control,
     handleSubmit,
     register,
     reset,
@@ -53,7 +57,7 @@ export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest
   }, [reset, defaultValues]);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} {...rest}>
+    <form onSubmit={handleSubmit(onSubmit)} {...rest}>
       {React.Children.map(children, (child: ReactElement) => {
         const type = child?.type as any;
         const isValidated =
@@ -68,6 +72,7 @@ export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest
             isTouched: typeof child.props.isTouched === 'undefined' ? touchedFields[childName] : child.props.isTouched,
             isDirty: typeof child.props.isDirty === 'undefined' ? dirtyFields[childName] : child.props.isDirty,
             key: childName,
+            control
           };
           if (type.displayName === 'ValidatedBlobField') {
             const defaultValue = defaultValues[childName];
@@ -81,13 +86,13 @@ export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest
         }
         return child;
       })}
-    </Form>
+    </form>
   );
 }
 
 ValidatedForm.displayName = 'ValidatedForm';
 
-export interface ValidatedInputProps extends InputProps {
+export type ValidatedInputProps = TextFieldProps & {
   // name of the component, also used for validation
   name: string;
   // register function from react-hook-form
@@ -104,9 +109,11 @@ export interface ValidatedInputProps extends InputProps {
   value?: any;
   // default value for the Input component, not needed if defaultValues for ValidatedForm is set
   defaultValue?: string | number | string[];
+
+  control?: Control<any>;
 }
 
-export interface ValidatedFieldProps extends ValidatedInputProps {
+export type ValidatedFieldProps = ValidatedInputProps & {
   // label for the field
   label?: string;
   // className for label
@@ -121,6 +128,7 @@ export interface ValidatedFieldProps extends ValidatedInputProps {
   check?: boolean;
   // css class for the input element
   inputClass?: string;
+  multiple?: boolean;
   // tag attribute for input
   inputTag?: React.ElementType;
 }
@@ -145,13 +153,18 @@ export function ValidatedInput({
   className,
   onChange,
   onBlur,
+  control,
   ...attributes
 }: ValidatedInputProps): JSX.Element {
   if (!register) {
     return (
-      <Input name={name} id={id} className={className} onChange={onChange} onBlur={onBlur} {...attributes}>
-        {children}
-      </Input>
+      <Controller
+        name={`${name}-wraper`}
+        control={control}
+        render={({ field }) => (
+          <TextField id={id} className={className} onChange={onChange} {...field} {...attributes} />
+        )}
+      />
     );
   }
 
@@ -159,29 +172,16 @@ export function ValidatedInput({
   className = isTouched ? `${className} is-touched` : className;
   className = isDirty ? `${className} is-dirty` : className;
 
-  const { name: registeredName, onBlur: onBlurValidate, onChange: onChangeValidate, ref } = register(name, validate);
+  const { name: registeredName } = register(name, validate);
   return (
     <>
-      <Input
+      <Controller
         name={registeredName}
-        id={id}
-        valid={isTouched && !error}
-        invalid={!!error}
-        innerRef={ref}
-        className={className}
-        onChange={e => {
-          void onChangeValidate(e);
-          onChange && onChange(e);
-        }}
-        onBlur={e => {
-          void onBlurValidate(e);
-          onBlur && onBlur(e);
-        }}
-        {...attributes}
-      >
-        {children}
-      </Input>
-      {error && <FormFeedback>{error.message}</FormFeedback>}
+        control={control}
+        render={({ field }) => (
+          <TextField id={id} error={!!error} helperText={error && error.message} className={className} onChange={onChange} label={name} {...field} {...attributes} />
+        )}
+      />
     </>
   );
 }
@@ -205,7 +205,6 @@ export function ValidatedField({
   check,
   row,
   col,
-  tag,
   label,
   labelClass,
   labelHidden,
@@ -215,20 +214,20 @@ export function ValidatedField({
   ...attributes
 }: ValidatedFieldProps): JSX.Element {
   const input = (
-    <ValidatedInput name={name} id={id} disabled={disabled} className={inputClass} hidden={hidden} tag={inputTag} {...attributes}>
+    <ValidatedInput name={name} id={id} disabled={disabled} className={inputClass} hidden={hidden} {...attributes}>
       {children}
     </ValidatedInput>
   );
 
-  const inputRow = row ? <Col {...col}>{input}</Col> : input;
+  const inputRow = row ? <Grid item {...col}>{input}</Grid> : input;
   return (
-    <FormGroup check={check} disabled={disabled} row={row} className={className} hidden={hidden} tag={tag}>
+    <FormGroup row={row} className={className} hidden={hidden}>
       {check && inputRow}
-      {label && (
+      {/* {label && (
         <Label id={`${name}Label`} check={check} for={id} className={labelClass} hidden={labelHidden || hidden}>
           {label}
         </Label>
-      )}
+      )} */}
       {!check && inputRow}
     </FormGroup>
   );
@@ -236,7 +235,7 @@ export function ValidatedField({
 
 ValidatedField.displayName = 'ValidatedField';
 
-interface ValidatedBlobFieldProps extends ValidatedFieldProps {
+type ValidatedBlobFieldProps = ValidatedFieldProps & {
   // set value function from react-hook-forms
   setValue?: UseFormSetValue<{
     [x: string]: any;
@@ -279,7 +278,6 @@ export function ValidatedBlobField({
   disabled,
   row,
   col,
-  tag,
   label,
   labelClass,
   labelHidden,
@@ -320,21 +318,16 @@ export function ValidatedBlobField({
   };
 
   const renderFormGroup = inner => (
-    <FormGroup disabled={disabled} row={row} className={className} hidden={hidden} tag={tag}>
-      {label && (
-        <Label id={`${name}Label`} for={id} className={labelClass} hidden={labelHidden || hidden}>
-          {label}
-        </Label>
-      )}
+    <FormGroup row={row} className={className} hidden={hidden}>
       {inner}
     </FormGroup>
   );
 
-  const inputRow = input => (row ? <Col {...col}>{input}</Col> : input);
+  const inputRow = input => (row ? <Grid item {...col}>{input}</Grid> : input);
 
   if (!register) {
     return renderFormGroup(
-      inputRow(<Input type="file" id={id} name={name} className={className} onChange={onChange} onBlur={onBlur} {...attributes} />)
+      inputRow(<TextField type="file" id={id} name={name} className={className} onChange={onChange} onBlur={onBlur} {...attributes} />)
     );
   }
 
@@ -350,36 +343,35 @@ export function ValidatedBlobField({
   const input = (
     <>
       <input id={`file_${name}_content_type`} name={contentTypeName} type="hidden" />
-      <Input
+      <TextField
         type="file"
         id={id}
         name={name}
-        valid={isTouched && !error}
-        invalid={!!error}
+        // valid={isTouched && !error}
+        // invalid={!!error}
         className={className}
-        onChange={e => {
-          setFileData(
-            e,
-            (contentType, data) => {
-              setBlobValue(data, contentType);
-            },
-            isImage
-          );
-          onChange && onChange(e);
-        }}
-        onBlur={e => {
-          setFileData(
-            e,
-            (contentType, data) => {
-              setBlobValue(data, contentType);
-            },
-            isImage
-          );
-          onBlur && onBlur(e);
-        }}
+        // onChange={e => {
+        //   setFileData(
+        //     e,
+        //     (contentType, data) => {
+        //       setBlobValue(data, contentType);
+        //     },
+        //     isImage
+        //   );
+        //   onChange && onChange(e);
+        // }}
+        // onBlur={e => {
+        //   setFileData(
+        //     e,
+        //     (contentType, data) => {
+        //       setBlobValue(data, contentType);
+        //     },
+        //     isImage
+        //   );
+        //   onBlur && onBlur(e);
+        // }}
         {...attributes}
       />
-      {error && <FormFeedback>{error.message}</FormFeedback>}
     </>
   );
 

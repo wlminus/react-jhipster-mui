@@ -1,11 +1,4 @@
 
-# UNDER CONTRUCTION
-The feature listed here have changed to Material UI
-* JhiPagination
-
-The rest under contruction, it still work in reactstrap
-
-
 <p align="center">
   <a href="http://www.jhipster.tech/" rel="noopener" target="_blank">
     <img width="150" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/main/images/logo/logo-jhipster2x.png" alt="MUI logo">
@@ -44,10 +37,8 @@ export interface IJhiPaginationProps {
 }
 ```
 
-
-
-
-
+# REMARK
+Jhipster design some validation form helper using react-hook-form and react strap, but it's little bit conflict with Material UI form component mindset, so I suggest to use Material UI form component with react-hook-form direactly but not from this lib.
 
 ---
 Full documentation and information about jhipster is available on website at [http://www.jhipster.tech/](http://www.jhipster.tech/)
