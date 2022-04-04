@@ -18,6 +18,7 @@ import {
 
 import Button from '@mui/material/Button';
 import Grid from "@mui/material/Grid";
+import Box from '@mui/material/Box';
 
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { byteSize, isEmpty, openFile } from '../util';
@@ -25,7 +26,7 @@ import FormGroup from '@mui/material/FormGroup';
 
 export interface ValidatedFormProps {
   children: React.ReactNode;
-  onSubmit: SubmitHandler<FieldValues>;
+  onSubmit: SubmitHandler<FieldValues> | any;
   defaultValues?: DefaultValues<FieldValues>;
   mode?: keyof ValidationMode;
   [key: string]: any;
@@ -57,7 +58,7 @@ export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest
   }, [reset, defaultValues]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} {...rest}>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} {...rest}>
       {React.Children.map(children, (child: ReactElement) => {
         const type = child?.type as any;
         const isValidated =
@@ -86,7 +87,7 @@ export function ValidatedForm({ defaultValues, children, onSubmit, mode, ...rest
         }
         return child;
       })}
-    </form>
+    </Box>
   );
 }
 
